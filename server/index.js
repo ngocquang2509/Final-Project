@@ -8,14 +8,9 @@ import dotenv from 'dotenv'
 const app = express()
 dotenv.config()
 
-app.use('/invoices', invoiceRoutes)
-app.use('/clients', clientRoutes)
-app.use('/users', userRoutes)
-app.use('/profiles', profile)
-
 
 app.get('/', (req, res) => {
-    res.send('SERVER IS RUNNING')
+    res.send('Server is running')
   })
 
 const DB_URL = process.env.DB_URL
