@@ -8,6 +8,10 @@ import dotenv from 'dotenv'
 const app = express()
 dotenv.config()
 
+import invoiceRoutes from './routes/invoices.js'
+import clientRoutes from './routes/clients.js'
+import userRoutes from './routes/userRoutes.js'
+import profile from './routes/profile.js'
 
 app.get('/', (req, res) => {
     res.send('Server is running')
@@ -23,4 +27,4 @@ app.use('/invoices', invoiceRoutes)
 
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
-    .catch((error) => console.log(error.message))
+    .catch((error) => console.log("DB error" + error.message))
