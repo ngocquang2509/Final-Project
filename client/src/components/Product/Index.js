@@ -1,12 +1,13 @@
  /* eslint-disable */
 import React, { useState, useEffect} from 'react'
-import Clients from './Clients'
-import AddClient from './AddClient'
-import { getClientsByUser } from '../../actions/clientActions'
+import Products from './Products'
+import AddClient from './AddProduct'
+import { getproductsByUser } from '../../actions/clientActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 import NoData from '../svgIcons/NoData'
 import Spinner from '../Spinner/Spinner'
+import {fetchProduct} from '../../api/index'
 
 
 const ClientList = () => {
@@ -15,26 +16,33 @@ const ClientList = () => {
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const [currentId, setCurrentId] = useState(null)
+
+    const [products, setProducts] = useState([]);
+
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('profile'))
-    const {clients} = useSelector((state) => state.clients)
-    const isLoading = useSelector(state => state.clients.isLoading)
-    // const clients = []
+    const [isLoading, setIsLoading] = useState(false);
+    // const products = []
 
     
     // useEffect(() => {
     // }, [currentId, dispatch]);
     
-//     useEffect(() => {
-//         dispatch(getClients(1));
-//         // dispatch(getClientsByUser({userId : user?.result?._id}));
-//         // dispatch(getClientsByUser({ search :user?.result?._id, tags: tags.join(',') }));
-//     },[location]
+    useEffect(() => {
+       const getData = async () => {
+         setIsLoading(true)
+         const {data} = await fetchProduct();
+         console.log(data.data)
+         setProducts(data.data)
+         setIsLoading(false)
+       }
+       getData()
+    },[])
 // )
 
-useEffect(() => {
-    dispatch(getClientsByUser({ search: user?.result?._id || user.result.googleId }));
-  },[location, dispatch])
+// useEffect(() => {
+//     dispatch(getproductsByUser({ search: user?.result?._id || user.result.googleId }));
+//   },[location, dispatch])
 
   if(!user) {
     history.push('/login')
@@ -47,7 +55,7 @@ useEffect(() => {
     </div>
   }
 
-  if(clients.length === 0) {
+  if(products.length === 0) {
     return  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', paddingTop: '20px', margin: '80px'}}>
       <NoData />
     <p style={{padding: '40px', color: 'gray', textAlign: 'center'}}>No customers yet. Click the plus icon to add customer</p>
@@ -63,12 +71,12 @@ useEffect(() => {
                 currentId={currentId}
                 setCurrentId={setCurrentId}
             />
-            <Clients 
+            <Products 
                 open={open} 
                 setOpen={setOpen}
                 currentId={currentId}
                 setCurrentId={setCurrentId}
-                clients={clients}
+                products={products}
             />
         </div>
     )

@@ -14,7 +14,7 @@ const Footer = () => {
     return (
         <footer>
             <div className={styles.footerText}>
-            ©Arc Invoice| made with ♥ by Panshak Solomon <span><a href="https://github.com/Panshak/arcinvoice" target="_blank" rel="noopener noreferrer">[Download source code]</a></span>
+            <span>Final Project</span>
             </div>
             {user && (
             <FabButton />

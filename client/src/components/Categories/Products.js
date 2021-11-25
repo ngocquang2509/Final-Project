@@ -1,6 +1,6 @@
 import React, {useState } from 'react';
 import { useDispatch } from 'react-redux'
-import styles from './Clients.module.css'
+import styles from './Products.module.css'
 // import moment from 'moment'
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ import { Button } from '@material-ui/core';
 import { useSnackbar } from 'react-simple-snackbar'
 
 import { deleteClient } from '../../actions/clientActions';
-// import clients from '../../clients.json'
+// import products from '../../products.json'
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -107,16 +107,16 @@ const useStyles2 = makeStyles(theme => ({
 }));
 
 
-const Clients = ({ setOpen, setCurrentId, clients }) => {
+const Products = ({ setOpen, setCurrentId, products }) => {
     
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(clients.length);
+  const [rowsPerPage, setRowsPerPage] = useState(products.length);
       // eslint-disable-next-line 
       const [openSnackbar, closeSnackbar] = useSnackbar()
 
   const dispatch = useDispatch()
-  const rows = clients
+  const rows = products
   
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows?.length - page * rowsPerPage);
 
@@ -152,11 +152,9 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
           <TableRow>
             <TableCell style={{...headerStyle, width: '10px'}}>Number</TableCell>
             <TableCell style={headerStyle}>Name</TableCell>
-            <TableCell style={headerStyle}>Email</TableCell>
-            <TableCell style={headerStyle}>Phone</TableCell>
+            <TableCell style={headerStyle}>Date Created</TableCell>
             <TableCell style={headerStyle}>Edit</TableCell>
-            <TableCell style={headerStyle}>Delete</TableCell>
-            
+            <TableCell style={headerStyle}>Delete</TableCell>        
           </TableRow>
         </TableHead>
 
@@ -167,9 +165,8 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
           ).map((row, index) => (
             <TableRow key={row._id} styel={{cursor: 'pointer'}} >
               <TableCell style={{...tableStyle, width: '10px'}}>{index + 1}</TableCell>
-              <TableCell  style={tableStyle} scope="row" > <Button style={{textTransform: 'none'}}  > {row.name} </Button></TableCell>
-              <TableCell style={tableStyle}>{row.email}</TableCell>
-              <TableCell style={tableStyle}>{row.phone}</TableCell>
+              <TableCell  style={tableStyle} scope="row" > <Button style={{textTransform: 'none'}}  > {row.categoryName} </Button></TableCell>
+              <TableCell style={tableStyle}>{row.createdAt}</TableCell>
               <TableCell style={{...tableStyle, width: '10px'}}>
                   <IconButton onClick={() => handleEdit(row._id)}>
                     <BorderColorIcon style={{width: '20px', height: '20px'}} />
@@ -214,4 +211,4 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
   );
 }
 
-export default Clients
+export default Products

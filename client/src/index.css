@@ -242,7 +242,7 @@ main {
 
 .link-text {
   display: none;
-  margin-left: 1rem;
+  margin-left: 0.25rem;
 }
 
 .nav-link svg {
@@ -327,7 +327,7 @@ main {
   }
 
   .navbar:hover {
-    width: 16rem;
+    width: 14rem;
   }
 
   .navbar:hover .link-text {

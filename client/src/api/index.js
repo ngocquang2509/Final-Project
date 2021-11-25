@@ -1,7 +1,11 @@
 import axios from 'axios'
 
 // const API = axios.create({ baseURL: 'http://localhost:5000'})
-const API = axios.create({ baseURL: process.env.REACT_APP_API})
+const API = axios.create({ baseURL: process.env.REACT_APP_API}, {
+    headers: {
+        "Content-Type": "applciation/json"
+    }
+})
 console.log(process.env.REACT_APP_API);
 
 API.interceptors.request.use((req) => {
@@ -39,3 +43,7 @@ export const fetchProfilesByUser = (searchQuery) => API.get(`/profiles?searchQue
 export const createProfile = (newProfile) => API.post('/profiles', newProfile);
 export const updateProfile = (id, updatedProfile) => API.patch(`/profiles/${id}`, updatedProfile);
 export const deleteProfile = (id) => API.delete(`/profiles/${id}`);
+
+export const fetchProduct = () => API.get('/products')
+
+export const fetchCategories = () => API.get('/categories')

@@ -14,6 +14,8 @@ import Header from './components/Header/Header';
 import Settings from './components/Settings/Settings';
 import Forgot from './components/Password/Forgot'
 import Reset from './components/Password/Reset'
+import Products from './components/Product/Index';
+import Categories from './components/Categories/Index'
 
 function App() {
 
@@ -35,10 +37,11 @@ function App() {
           <Route path="/settings" exact component={Settings} />
           <Route path="/dashboard" exact component={Dashboard} />
           <Route path="/customers" exact component={ClientList} />
+          <Route path="/categories" exact component={Categories} />
+          <Route path="/products" exact component={Products} />
           <Route path="/forgot" exact component={Forgot} />
           <Route path="/reset/:token" exact component={Reset} />
           <Redirect exact from="/new-invoice" to="/invoice" />
-
         </Switch>
         <Footer />
         </SnackbarProvider>
