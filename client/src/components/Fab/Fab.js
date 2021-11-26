@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation , useHistory} from 'react-router-dom';
 import { Fab, Action } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
 import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AddClient from '../Invoice/AddClient';
+import AddCategory from '../Categories/AddCate';
+import {FaLayerGroup} from 'react-icons/fa'
 
 
 const FabButton = () => {
@@ -13,6 +15,9 @@ const FabButton = () => {
   const location = useLocation()
   const mainButtonStyles = {backgroundColor: '#1976D2'}
   const [open, setOpen] = useState(false)
+  const [cateOpen, setCateOpen] = useState(false)
+
+  const history = useHistory()
 
 
   // if(location.pathname === '/invoice') return null
@@ -20,6 +25,7 @@ const FabButton = () => {
     return (
         <div>
            <AddClient setOpen={setOpen} open={open} />
+           <AddCategory setOpen={setCateOpen} open={cateOpen} />
           <Fab
             mainButtonStyles={mainButtonStyles}
             icon={ <AddIcon />}
@@ -29,7 +35,7 @@ const FabButton = () => {
             {location.pathname !== '/invoice' && (
               <Action
                   text="New Invoice"
-                  onClick={() => window.location.href='/invoice'}
+                  onClick={() => history.push('/invoice')}
                 >
                   <CreateIcon />
               </Action>
@@ -40,6 +46,12 @@ const FabButton = () => {
                 onClick={() => setOpen((prev) => !prev)}
               >
                 <PersonAddIcon />
+            </Action>
+            <Action
+                text="New Category"
+                onClick={() => setCateOpen((prev) => !prev)}
+              >
+                <FaLayerGroup />
             </Action>
 
           </Fab>

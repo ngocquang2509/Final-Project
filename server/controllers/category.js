@@ -16,11 +16,16 @@ export const getCategories = async (req, res) => {
 export const createCategory = async (req, res) => {
     try {
         const {categoryName} = req.body;
+       const findCate = await CategoryModel.findOne({categoryName});
+       if(findCate) {
+            res.status(400).json({status: 400, message: "Category Existed"})
+       } else {
         const newCate = await new CategoryModel({
             categoryName
         });
         await newCate.save()
         res.status(201).json({status: 201, message: "Category Created"})
+       }
     } catch (error) {
         console.log(error)
     }
@@ -30,7 +35,8 @@ export const updateCategory = async (req, res) => {
     try {
         const {id} = req.params
         const {categoryName} = req.body;
-        await new CategoryModel.findByIdAndUpdate(id, {...categoryName});
+        console.log(categoryName);
+        await CategoryModel.findByIdAndUpdate(id, {categoryName});
         res.status(200).json({status: 200, message: "Category Updated"})
     } catch (error) {
         console.log(error)
@@ -39,7 +45,7 @@ export const updateCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
     try {
         const {id} = req.params
-        await new CategoryModel.findByIdAndRemove(id);
+        await CategoryModel.findByIdAndDelete(id);
         res.status(200).json({status: 200, message: "Category Removed"})
     } catch (error) {
         console.log(error)

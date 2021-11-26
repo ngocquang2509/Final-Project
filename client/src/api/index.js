@@ -1,11 +1,10 @@
 import axios from 'axios'
 
 // const API = axios.create({ baseURL: 'http://localhost:5000'})
-const API = axios.create({ baseURL: process.env.REACT_APP_API}, {
-    headers: {
-        "Content-Type": "applciation/json"
-    }
-})
+const API = axios.create({ baseURL: process.env.REACT_APP_API,
+validateStatus: function (status) {
+    return status <= 500;
+}})
 console.log(process.env.REACT_APP_API);
 
 API.interceptors.request.use((req) => {
@@ -47,3 +46,6 @@ export const deleteProfile = (id) => API.delete(`/profiles/${id}`);
 export const fetchProduct = () => API.get('/products')
 
 export const fetchCategories = () => API.get('/categories')
+export const createCategory = (formData) => API.post('/categories', formData)
+export const editCategory = (formData) => API.put(`/categories/${formData._id}`, formData)
+export const deleteCategory = (id) => API.delete(`/categories/${id}`)

@@ -1,48 +1,47 @@
  /* eslint-disable */
 import React, { useState, useEffect} from 'react'
-import Products from './Products'
-import AddClient from './AddProduct'
+import Category from './Cate'
+import Button from '@material-ui/core/Button';
 import { getproductsByUser } from '../../actions/clientActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 import NoData from '../svgIcons/NoData'
 import Spinner from '../Spinner/Spinner'
-import {fetchCategories} from '../../api/index'
+import {fetchCategories, deleteCategory} from '../../api/index'
+import AddCategory from './AddCate'
+import {toast} from 'react-toastify'
 
 
 const ClientList = () => {
 
     const history = useHistory()
-    const location = useLocation()
     const [open, setOpen] = useState(false)
     const [currentId, setCurrentId] = useState(null)
 
     const [products, setProducts] = useState([]);
+    const [edit, setEdit] = useState({});
 
-    const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('profile'))
     const [isLoading, setIsLoading] = useState(false);
-    // const products = []
 
-    
-    // useEffect(() => {
-    // }, [currentId, dispatch]);
+    const getData = async () => {
+      setIsLoading(true)
+      const {data} = await fetchCategories();
+      setProducts(data.data)
+      setIsLoading(false)
+    }
     
     useEffect(() => {
-       const getData = async () => {
-         setIsLoading(true)
-         const {data} = await fetchCategories();
-         console.log(data.data)
-         setProducts(data.data)
-         setIsLoading(false)
-       }
        getData()
     },[])
-// )
 
-// useEffect(() => {
-//     dispatch(getproductsByUser({ search: user?.result?._id || user.result.googleId }));
-//   },[location, dispatch])
+    const handleDelete = async (id) => {
+      const {data} = await deleteCategory(id);
+      if(data?.status === 200) {
+        toast.success("Category Deleted")
+        getData();
+      }
+    }
 
   if(!user) {
     history.push('/login')
@@ -65,18 +64,18 @@ const ClientList = () => {
 
     return (
         <div>
-            <AddClient 
+            <AddCategory 
                 open={open} 
                 setOpen={setOpen}
-                currentId={currentId}
-                setCurrentId={setCurrentId}
+                edit={edit}
+                setEdit={setEdit}
             />
-            <Products 
+            <Category 
                 open={open} 
                 setOpen={setOpen}
-                currentId={currentId}
-                setCurrentId={setCurrentId}
                 products={products}
+                handleDelete={handleDelete}
+                setEdit={setEdit}
             />
         </div>
     )

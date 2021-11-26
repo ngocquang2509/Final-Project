@@ -16,6 +16,9 @@ import Forgot from './components/Password/Forgot'
 import Reset from './components/Password/Reset'
 import Products from './components/Product/Index';
 import Categories from './components/Categories/Index'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
 
@@ -46,6 +49,17 @@ function App() {
         <Footer />
         </SnackbarProvider>
       </BrowserRouter>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        pauseOnHover
+        limit={1}
+      />
     </div>
   );
 }

@@ -23,7 +23,7 @@ const NavBar = () => {
             <Link href="/dashboard" className="nav-link">
               <span className="link-text logo-text">
                 <img
-                  style={{ width: "160px" }}
+                  style={{ width: "80px" }}
                   src={logo}
                   alt="nq warehouse management"
                 />

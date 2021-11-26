@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux'
 import styles from './Clients.module.css'
 // import moment from 'moment'
@@ -116,7 +116,11 @@ const Clients = ({ setOpen, setCurrentId, clients }) => {
       const [openSnackbar, closeSnackbar] = useSnackbar()
 
   const dispatch = useDispatch()
-  const rows = clients
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    setRows(clients)
+  }, [])
   
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows?.length - page * rowsPerPage);
 

@@ -23,8 +23,6 @@ import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { Button } from '@material-ui/core';
 import { useSnackbar } from 'react-simple-snackbar'
-
-import { deleteClient } from '../../actions/clientActions';
 // import products from '../../products.json'
 
 const useStyles1 = makeStyles((theme) => ({
@@ -107,7 +105,7 @@ const useStyles2 = makeStyles(theme => ({
 }));
 
 
-const Products = ({ setOpen, setCurrentId, products }) => {
+const Products = ({ setOpen, products, handleDelete, setEdit }) => {
     
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
@@ -130,13 +128,12 @@ const Products = ({ setOpen, setCurrentId, products }) => {
   };
 
 
-  const handleEdit = (selectedInvoice) => {
-    
+  const handleEdit = (editItem) => {
+    setEdit(editItem)
     setOpen((prevState) => !prevState)
-    setCurrentId(selectedInvoice)
-
   }
 
+ 
 
   const tableStyle = { width: 160, fontSize: 14, cursor: 'pointer', borderBottom: 'none',  padding: '8px', textAlign: 'center' }
 const headerStyle = { borderBottom: 'none', textAlign: 'center'}
@@ -168,12 +165,12 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
               <TableCell  style={tableStyle} scope="row" > <Button style={{textTransform: 'none'}}  > {row.categoryName} </Button></TableCell>
               <TableCell style={tableStyle}>{row.createdAt}</TableCell>
               <TableCell style={{...tableStyle, width: '10px'}}>
-                  <IconButton onClick={() => handleEdit(row._id)}>
+                  <IconButton onClick={() => handleEdit(row)}>
                     <BorderColorIcon style={{width: '20px', height: '20px'}} />
                   </IconButton>
               </TableCell>
               <TableCell style={{...tableStyle, width: '10px'}}>
-                  <IconButton onClick={() => dispatch(deleteClient(row._id, openSnackbar))}>
+                  <IconButton onClick={() => handleDelete(row._id)}>
                     <DeleteOutlineRoundedIcon style={{width: '20px', height: '20px'}} />
                   </IconButton>
               </TableCell>
