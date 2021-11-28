@@ -15,7 +15,9 @@ import Settings from './components/Settings/Settings';
 import Forgot from './components/Password/Forgot'
 import Reset from './components/Password/Reset'
 import Products from './components/Product/Index';
+import Employee from './components/Employee/Index';
 import Categories from './components/Categories/Index'
+import CreateEmployee from './components/CreateEmployee/CreateEmployee';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -42,6 +44,8 @@ function App() {
           <Route path="/customers" exact component={ClientList} />
           <Route path="/categories" exact component={Categories} />
           <Route path="/products" exact component={Products} />
+          <Route path="/create" exact component={CreateEmployee} />
+          <Route path="/employee" exact component={Employee} />
           <Route path="/forgot" exact component={Forgot} />
           <Route path="/reset/:token" exact component={Reset} />
           <Redirect exact from="/new-invoice" to="/invoice" />

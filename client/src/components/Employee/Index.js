@@ -1,14 +1,14 @@
  /* eslint-disable */
 import React, { useState, useEffect} from 'react'
-import Category from './Cate'
+import Employee from './Employee'
 import Button from '@material-ui/core/Button';
-import { getproductsByUser } from '../../actions/clientActions'
+import { getaccountsByUser } from '../../actions/clientActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 import NoData from '../svgIcons/NoData'
 import Spinner from '../Spinner/Spinner'
-import {fetchCategories, deleteCategory} from '../../api/index'
-import AddCategory from './AddCate'
+import {deleteProfile, fetchAllProfiles} from '../../api/index'
+import AddEmployee from './AddEmployee'
 import {toast} from 'react-toastify'
 
 
@@ -17,7 +17,7 @@ const ClientList = () => {
     const history = useHistory()
     const [open, setOpen] = useState(false)
 
-    const [products, setProducts] = useState([]);
+    const [accounts, setAccounts] = useState([]);
     const [edit, setEdit] = useState({});
 
     const user = JSON.parse(localStorage.getItem('profile'))
@@ -25,8 +25,9 @@ const ClientList = () => {
 
     const getData = async () => {
       setIsLoading(true)
-      const {data} = await fetchCategories();
-      setProducts(data.data)
+      const {data} = await fetchAllProfiles();
+      console.log(data);
+      setAccounts(data.data)
       setIsLoading(false)
     }
     
@@ -35,9 +36,9 @@ const ClientList = () => {
     },[])
 
     const handleDelete = async (id) => {
-      const {data} = await deleteCategory(id);
-      if(data?.status === 200) {
-        toast.success("Category Deleted")
+      const {data, status} = await deleteProfile(id);
+      if(status === 200) {
+        toast.success("Profile Deleted")
         getData();
       }
     }
@@ -53,7 +54,7 @@ const ClientList = () => {
     </div>
   }
 
-  if(products.length === 0) {
+  if(accounts.length === 0) {
     return  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', paddingTop: '20px', margin: '80px'}}>
       <NoData />
     <p style={{padding: '40px', color: 'gray', textAlign: 'center'}}>No customers yet. Click the plus icon to add customer</p>
@@ -63,16 +64,16 @@ const ClientList = () => {
 
     return (
         <div>
-            <AddCategory 
+            <AddEmployee 
                 open={open} 
                 setOpen={setOpen}
                 edit={edit}
                 setEdit={setEdit}
             />
-            <Category 
+            <Employee 
                 open={open} 
                 setOpen={setOpen}
-                products={products}
+                accounts={accounts}
                 handleDelete={handleDelete}
                 setEdit={setEdit}
             />

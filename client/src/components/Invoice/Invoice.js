@@ -336,7 +336,7 @@ const Invoice = () => {
             </TableRow>
             </TableHead>
             <TableBody>
-            {invoiceData.items.map((itemField, index) => (
+            {invoiceData?.items?.map((itemField, index) => (
                 <TableRow key={index}>
                 <TableCell  scope="row" style={{width: '40%' }}> <InputBase style={{width: '100%'}} outline="none" sx={{ ml: 1, flex: 1 }} type="text" name="itemName" onChange={e => handleChange(index, e)} value={itemField.itemName} placeholder="Item name or description" /> </TableCell>
                 <TableCell align="right"> <InputBase sx={{ ml: 1, flex: 1 }} type="number" name="quantity" onChange={e => handleChange(index, e)} value={itemField.quantity} placeholder="0" /> </TableCell>

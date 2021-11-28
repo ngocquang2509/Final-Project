@@ -2,24 +2,24 @@
 import React, { useState, useEffect} from 'react'
 import Products from './Products'
 import AddClient from './AddProduct'
-import { getproductsByUser } from '../../actions/clientActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 import NoData from '../svgIcons/NoData'
 import Spinner from '../Spinner/Spinner'
-import {fetchProduct} from '../../api/index'
+import {toast} from 'react-toastify'
+import {fetchProduct, deleteProduct} from '../../api/index'
 
 
 const ClientList = () => {
 
     const history = useHistory()
-    const location = useLocation()
     const [open, setOpen] = useState(false)
     const [currentId, setCurrentId] = useState(null)
 
     const [products, setProducts] = useState([]);
+    const [edit, setEdit] = useState({});
 
-    const dispatch = useDispatch()
+
     const user = JSON.parse(localStorage.getItem('profile'))
     const [isLoading, setIsLoading] = useState(false);
     // const products = []
@@ -27,17 +27,23 @@ const ClientList = () => {
     
     // useEffect(() => {
     // }, [currentId, dispatch]);
+    const getData = async () => {
+      setIsLoading(true)
+      const {data} = await fetchProduct();
+      console.log(data.data)
+      setProducts(data.data)
+      setIsLoading(false)
+    }
     
-    useEffect(() => {
-       const getData = async () => {
-         setIsLoading(true)
-         const {data} = await fetchProduct();
-         console.log(data.data)
-         setProducts(data.data)
-         setIsLoading(false)
-       }
+    useEffect(() => { 
        getData()
     },[])
+
+    const handleDelete = async (id) => {
+      const {data}  = await deleteProduct(id);
+      getData();
+      data?.status === 200 && toast.success("Product Deleted");
+    }
 // )
 
 // useEffect(() => {
@@ -68,15 +74,15 @@ const ClientList = () => {
             <AddClient 
                 open={open} 
                 setOpen={setOpen}
-                currentId={currentId}
-                setCurrentId={setCurrentId}
+                edit={edit}
+                setEdit={setEdit}
             />
             <Products 
                 open={open} 
                 setOpen={setOpen}
-                currentId={currentId}
-                setCurrentId={setCurrentId}
                 products={products}
+                handleDelete={handleDelete}
+                setEdit={setEdit}
             />
         </div>
     )

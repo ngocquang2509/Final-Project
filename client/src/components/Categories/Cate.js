@@ -113,7 +113,6 @@ const Products = ({ setOpen, products, handleDelete, setEdit }) => {
       // eslint-disable-next-line 
       const [openSnackbar, closeSnackbar] = useSnackbar()
 
-  const dispatch = useDispatch()
   const rows = products
   
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows?.length - page * rowsPerPage);

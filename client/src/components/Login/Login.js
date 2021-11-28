@@ -90,33 +90,13 @@ const Login = () => {
             )}
             <Field name="email" label="Email Address" handleChange={handleChange} type="email" />
             <Field name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
-            { isSignup && <Field name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
           </Grid>
           <div className={styles.buttons}>
                <div>
                     {/* <button className={styles.submitBtn}> { isSignup ? 'Sign Up' : 'Sign In' }</button> */}
                     <ProgressButton>{ isSignup ? 'Sign Up' : 'Sign In' }</ProgressButton>
                 </div>
-                <div> 
-                    <GoogleLogin
-                    clientId = {process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                    render={(renderProps) => (
-                        <button className={styles.googleBtn} onClick={renderProps.onClick} disabled={renderProps.disabled} >Google</button>
-                    )}
-                    onSuccess={googleSuccess}
-                    onFailure={googleError}
-                    cookiePolicy="single_host_origin"
-                />
-                </div>
           </div>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Button onClick={switchMode}>
-                { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
-              </Button>
-            </Grid>
-          </Grid>
-        <Link to="forgot"><p style={{textAlign: 'center', color: '#1d7dd6', marginTop: '20px'}}>Forgotten Password?</p></Link>
         </form>
       </Paper>
     </Container>

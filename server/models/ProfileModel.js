@@ -8,7 +8,7 @@ const profileSchema = mongoose.Schema({
     contactAddress: String, 
     logo: String,
     website: String,
-    userId: [String],
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
 })
 
 const Profile = mongoose.model('Profile', profileSchema)

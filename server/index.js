@@ -4,6 +4,9 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
 import nodemailer from 'nodemailer'
+import UserModel from './models/userModel.js'
+import ProfileModel from './models/ProfileModel.js'
+import bcrypt from 'bcryptjs'
 
 
 
@@ -113,6 +116,30 @@ app.get('/fetch-pdf', (req, res) => {
      res.sendFile(`${__dirname}/invoice.pdf`)
 })
 
+const init = async () => {
+    const count = await UserModel.estimatedDocumentCount();
+    if(count === 0) {
+        const admin = await new UserModel({
+            email: "admin@admin.com",
+            password: await bcrypt.hash("admin", 12),
+            name: "Administrator",
+            role: "Admin",
+        })
+        await admin.save();
+        const newProfile = new ProfileModel({
+            name: "Administrator",
+            email: "admin@admin.com",
+            phoneNumber: "0987432123",
+            businessName: "NQ WAREHOUSE MANAGEMENT",
+            contactAddress: "25 Phuoc Truong 2, Son Tra, Da Nang", 
+            userId: admin._id,
+            createdAt: new Date().toISOString() 
+          })
+          await newProfile.save();
+          console.log("db init succeed");
+    }
+}
+
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
+    .then(() => {init(); app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))})
     .catch((error) => console.log("DB error" + error.message))

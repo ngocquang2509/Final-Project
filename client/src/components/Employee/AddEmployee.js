@@ -10,7 +10,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { createCategory, editCategory } from '../../api';
+import { createCategory, editCategory, updateProfile } from '../../api';
 import { useSnackbar } from 'react-simple-snackbar'
 import {toast} from 'react-toastify'
 
@@ -58,25 +58,25 @@ const DialogActions = withStyles((theme) => ({
 
 const AddCategory = ({ setOpen, open, edit, setEdit}) => {
     //const location = useLocation()
-    const [categoryData, setCategoryName] = useState({ categoryName: ''})
+    const [employeeData, setEmployeeData] = useState({ name: '', email: '', phoneNumber: '', businessName: '', contactAddress: ''})
     // eslint-disable-next-line 
     useEffect(() => {
       if(edit?._id !== '') {
-        setCategoryName({...edit})
+        setEmployeeData({...edit})
       }
     }, [edit])
 
-    console.log(categoryData);
+    console.log(employeeData);
 
 
     const handleSubmitCate = async (e)=> {
         e.preventDefault()
-        if(categoryData?.categoryName === '') {
+        if(employeeData?.categoryName === '') {
           toast.error("Please fill the cateogry name")
           return;
         }
-        if(categoryData?._id) {
-          const response = await editCategory(categoryData)
+        if(employeeData?._id) {
+          const response = await updateProfile(employeeData._id,employeeData)
           if(response?.data?.status === 400) {
             toast.error(response?.data?.message);
             return;
@@ -84,19 +84,19 @@ const AddCategory = ({ setOpen, open, edit, setEdit}) => {
           else {
             clear();
             handleClose();
-            window.location.href = "/categories"
-            toast.success("Category Updated");
+            window.location.href = "/employee"
+            toast.success("Employee Updated");
           }
         } else {
-          const response = await createCategory(categoryData)
+          const response = await createCategory(employeeData)
           if(response?.data?.status === 400) {
             toast.error(response?.data?.message);
             return;
           }
           else {
             handleClose();
-            window.location.href = "/categories"
-            toast.success("Category Created");
+            window.location.href = "/employee"
+            toast.success("Employee Created");
           }
         }
         
@@ -104,7 +104,7 @@ const AddCategory = ({ setOpen, open, edit, setEdit}) => {
 
   const clear =() => {
     setEdit({}) 
-    setCategoryName({ categoryName: '' })
+    setEmployeeData({ categoryName: '' })
   }
     
   const handleClose = () => {
@@ -135,19 +135,51 @@ const AddCategory = ({ setOpen, open, edit, setEdit}) => {
         <form >
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} fullWidth>
             <DialogTitle id="customized-dialog-title" onClose={handleClose} style={{paddingLeft: '20px', color: 'white'}}>
-            {categoryData?._id ? 'Edit Category' : 'Create Category'}
+            {employeeData?._id ? 'Edit Category' : 'Create Category'}
             </DialogTitle>
             <DialogContent dividers>
 
 
             <div className="customInputs">
               <input 
-                placeholder="Category Name" 
+                placeholder="Full Name" 
                 style={inputStyle} 
-                name='categoryName' 
+                name='name' 
                 type='text'  
-                onChange={(e) => setCategoryName({...categoryData, [e.target.name]: e.target.value})}
-                value={categoryData.categoryName} 
+                onChange={(e) => setEmployeeData({...employeeData, [e.target.name]: e.target.value})}
+                value={employeeData.name} 
+              />
+              <input 
+                placeholder="Email" 
+                style={inputStyle} 
+                name='email' 
+                type='text'  
+                onChange={(e) => setEmployeeData({...employeeData, [e.target.name]: e.target.value})}
+                value={employeeData.email} 
+              />
+              <input 
+                placeholder="Phone Number" 
+                style={inputStyle} 
+                name='phoneNumber' 
+                type='text'  
+                onChange={(e) => setEmployeeData({...employeeData, [e.target.name]: e.target.value})}
+                value={employeeData.phoneNumber} 
+              />
+              <input 
+                placeholder="Business Name" 
+                style={inputStyle} 
+                name='businessName' 
+                type='text'  
+                onChange={(e) => setEmployeeData({...employeeData, [e.target.name]: e.target.value})}
+                value={employeeData.businessName} 
+              />
+               <input 
+                placeholder="Address" 
+                style={inputStyle} 
+                name='contactAddress' 
+                type='text'  
+                onChange={(e) => setEmployeeData({...employeeData, [e.target.name]: e.target.value})}
+                value={employeeData.contactAddress} 
               />
 
           </div>
@@ -155,7 +187,7 @@ const AddCategory = ({ setOpen, open, edit, setEdit}) => {
             </DialogContent>
             <DialogActions>
             <Button  onClick={handleSubmitCate}  variant="contained" style={{marginRight: '25px'}} >
-                Save Category
+                Save Profile
             </Button>
             </DialogActions>
       </Dialog>

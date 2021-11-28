@@ -13,7 +13,7 @@ const InvoiceSchema = mongoose.Schema({
     status: String,
     invoiceNumber: String,
     type: String,
-    creator: [String],
+    creator: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     totalAmountReceived: Number,
     client: { name: String, email: String, phone: String, address: String },
     paymentRecords: [ {amountPaid: Number, datePaid: Date, paymentMethod: String, note: String, paidBy: String } ],

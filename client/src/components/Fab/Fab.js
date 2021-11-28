@@ -7,7 +7,8 @@ import CreateIcon from '@material-ui/icons/Create';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AddClient from '../Invoice/AddClient';
 import AddCategory from '../Categories/AddCate';
-import {FaLayerGroup} from 'react-icons/fa'
+import {FaLayerGroup, FaBoxOpen} from 'react-icons/fa'
+import AddProduct from '../Product/AddProduct'
 
 
 const FabButton = () => {
@@ -16,6 +17,7 @@ const FabButton = () => {
   const mainButtonStyles = {backgroundColor: '#1976D2'}
   const [open, setOpen] = useState(false)
   const [cateOpen, setCateOpen] = useState(false)
+  const [productOpen, setProductOpen] = useState(false)
 
   const history = useHistory()
 
@@ -26,6 +28,7 @@ const FabButton = () => {
         <div>
            <AddClient setOpen={setOpen} open={open} />
            <AddCategory setOpen={setCateOpen} open={cateOpen} />
+           <AddProduct setOpen={setProductOpen} open={productOpen} />
           <Fab
             mainButtonStyles={mainButtonStyles}
             icon={ <AddIcon />}
@@ -52,6 +55,12 @@ const FabButton = () => {
                 onClick={() => setCateOpen((prev) => !prev)}
               >
                 <FaLayerGroup />
+            </Action>
+            <Action
+                text="New Product"
+                onClick={() => setProductOpen((prev) => !prev)}
+              >
+                <FaBoxOpen />
             </Action>
 
           </Fab>

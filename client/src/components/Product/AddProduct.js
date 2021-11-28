@@ -1,32 +1,31 @@
- /* eslint-disable */
-import React, { useState, useEffect} from 'react';
-import { useLocation } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-
-import { useDispatch, useSelector } from 'react-redux'
-import { createClient, updateClient } from '../../actions/clientActions'
-import { useSnackbar } from 'react-simple-snackbar'
+/* eslint-disable */
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
+import { createProduct, fetchCategories, editProduct } from "../../api";
+import { useSnackbar } from "react-simple-snackbar";
+import {toast} from 'react-toastify'
 
 const styles = (theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
-    backgroundColor: '#1976D2',
+    backgroundColor: "#1976D2",
     marginLeft: 0,
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
-    color: 'white',
+    color: "white",
   },
 });
 
@@ -36,7 +35,11 @@ const DialogTitle = withStyles(styles)((props) => {
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -57,56 +60,71 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-const AddClient = ({ setOpen, open, currentId, setCurrentId }) => {
-    const location = useLocation()
-    const [clientData, setClientData] = useState({ name: '', email: '', phone: '', address: '', userId: ''})
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
-    const dispatch = useDispatch()
-    const client = useSelector((state)=> currentId ? state.clients.clients.find((c) => c._id === currentId) : null)
-    // eslint-disable-next-line 
-    const [openSnackbar, closeSnackbar] = useSnackbar()
-
-
-    useEffect(() => {
-      if(client) {
-        setClientData(client)
-      }
-    }, [client])
-
-    useEffect(() => {
-      setUser(JSON.parse(localStorage.getItem('profile')))
-      // setClientData({...clientData, userId: user?.result?._id})
-    },[location])
-
-
-    useEffect(() => {
-      var checkId = user?.result?._id
-      if(checkId !== undefined) {
-        setClientData({...clientData, userId: [checkId]})
-      } else {
-        setClientData({...clientData, userId: [user?.result?.googleId]})
-      }
-      
-    },[location])
-
-
-    const handleSubmitClient =(e)=> {
-        e.preventDefault()
-        if(currentId) {
-          dispatch(updateClient(currentId, clientData, openSnackbar))
-        } else {
-          dispatch(createClient(clientData, openSnackbar))
-        }
-        
-        clear()
-        handleClose()
-    }
-
-  const clear =() => {
-    setCurrentId(null) 
-    setClientData({ name: '', email: '', phone: '', address: '', userId: [] })
+const AddClient = ({ setOpen, open, edit, setEdit }) => {
+  const [product, setProduct] = useState({
+    productName: "",
+    quantity: "",
+    price: "",
+    image: "",
+    categoryName: "",
+  });
+  const [listCate, setListCate] = useState([]);
+  
+  const getCate = async () => {
+    const response = await fetchCategories();
+    setListCate(response?.data?.data);
   }
-    
+
+  useEffect(() => {
+    edit?._id !== '' && setProduct({...edit})
+    getCate();
+  }, [edit])
+  // eslint-disable-next-line
+  const [openSnackbar, closeSnackbar] = useSnackbar();
+
+  const handleChange = (e) => {
+    setProduct({ ...product, [e.target.name]: e.target.value });
+  };
+
+  
+  const handleCreate = async () => {
+    for (const [key, value] of Object.entries(product)) {
+      console.log(`${key}: ${value}`);
+      if (value === "" && key !== "image") {
+        toast.error(`${key} is required!`);
+        return;
+      }
+    }
+    if (product?._id) {
+      const response = await editProduct(product);
+      if (response?.data?.status === 400) {
+        toast.error(response?.data?.message);
+        return;
+      } else {
+        clear();
+        handleClose();
+        toast.success("Product Created");
+        window.location.href = "/products";
+      }
+      } else {
+        const { data } = await createProduct(product);
+        if (data?.status == 400) {
+          toast?.error(data?.message);
+          return;
+        } else {
+          clear();
+          handleClose();
+          toast.success("Product Created");
+          window.location.href = "/products";
+      }
+    }
+  };
+
+  const clear = () => {
+    setProduct({ name: "", email: "", phone: "", address: "", userId: [] });
+    setEdit({})
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -126,68 +144,82 @@ const AddClient = ({ setOpen, open, currentId, setCurrentId }) => {
     borderBottom: "1px solid #eee",
     borderLeft: "0",
     borderRadius: "3px",
-    transition: "all 0.25s cubic-bezier(0.4, 0, 1, 1)"
-}
-
+    transition: "all 0.25s cubic-bezier(0.4, 0, 1, 1)",
+  };
 
   return (
     <div>
-        <form >
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} fullWidth>
-            <DialogTitle id="customized-dialog-title" onClose={handleClose} style={{paddingLeft: '20px', color: 'white'}}>
-            {currentId? 'Edit Customer' : 'Add new Client'}
-            </DialogTitle>
-            <DialogContent dividers>
-
-
+      <form>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+          fullWidth
+        >
+          <DialogTitle
+            id="customized-dialog-title"
+            onClose={handleClose}
+            style={{ paddingLeft: "20px", color: "white" }}
+          >
+            {product?._id ? "Edit Product" : "Add Product"}
+          </DialogTitle>
+          <DialogContent dividers>
             <div className="customInputs">
-              <input 
-                placeholder="Name" 
-                style={inputStyle} 
-                name='name' 
-                type='text'  
-                onChange={(e) => setClientData({...clientData, name: e.target.value})}
-                value={clientData.name} 
+              <input
+                placeholder="Product Name"
+                style={inputStyle}
+                name="productName"
+                type="text"
+                onChange={handleChange}
+                value={product.productName}
               />
-
-              <input 
-                placeholder="Email" 
-                style={inputStyle} 
-                name='email' 
-                type='text' 
-                onChange={(e) => setClientData({...clientData, email: e.target.value})}
-                value={clientData.email} 
+              <input
+                placeholder="Product Quantity"
+                style={inputStyle}
+                name="quantity"
+                type="text"
+                onChange={handleChange}
+                value={product.quantity}
               />
-
-              <input 
-                placeholder="Phone" 
-                style={inputStyle} 
-                name='phone' 
-                type='text'  
-                onChange={(e) => setClientData({...clientData, phone: e.target.value})}
-                value={clientData.phone} 
+              <input
+                placeholder="Product Price"
+                style={inputStyle}
+                name="price"
+                type="text"
+                onChange={handleChange}
+                value={product.price}
               />
-
-              <input 
-                placeholder="Address" 
-                style={inputStyle} 
-                name='address' 
-                type='text' 
-                onChange={(e) => setClientData({...clientData, address: e.target.value})}
-                value={clientData.address} 
+              <input
+                placeholder="Product Image"
+                style={inputStyle}
+                name="image"
+                type="text"
+                onChange={handleChange}
+                value={product.image}
               />
-          </div>
-
-            </DialogContent>
-            <DialogActions>
-            <Button  onClick={handleSubmitClient}  variant="contained" style={{marginRight: '25px'}} >
-                Save Customer
+              <select
+                placeholder="Product Category"
+                style={inputStyle}
+                name="categoryName"
+                type="text"
+                onChange={handleChange}
+                value={product.categoryName}
+              >{listCate.map(item => <option key={item._id}>{item.categoryName}</option>)}</select>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleCreate}
+              variant="contained"
+              style={{ marginRight: "25px" }}
+            >
+              {product?._id !== '' ? "Update": "Create"} Product
             </Button>
-            </DialogActions>
-      </Dialog>
-        </form>
+          </DialogActions>
+        </Dialog>
+      </form>
     </div>
   );
-}
+};
 
-export default AddClient
+export default AddClient;

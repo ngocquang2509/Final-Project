@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { FaBoxOpen, FaUserAlt, FaFileInvoiceDollar, FaChartPie, FaPlusCircle,FaLayerGroup } from "react-icons/fa";
+import { FaBoxOpen, FaUserAlt, FaFileInvoiceDollar, FaChartPie, FaPlusCircle,FaLayerGroup,FaUserPlus } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import { signup, signin } from '../../actions/auth'
 import logo from '../../assets/logo.png'
@@ -52,36 +52,59 @@ const NavBar = () => {
             </Link>
           </li>
 
-          <li className="nav-item">
-            <Link to="/invoice" className="nav-link">
-              <FaPlusCircle size={100} />{" "}
-              <span className="link-text">Create</span>
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/invoices" className="nav-link">
-              <FaFileInvoiceDollar size={100} />{" "}
-              <span className="link-text">Invoices</span>
-            </Link>
-          </li>
-          <li className="nav-item">
+          {user?.result?.role === "Employee" && (
+            <>
+              {" "}
+              <li className="nav-item">
+                <Link to="/invoice" className="nav-link">
+                  <FaPlusCircle size={100} />{" "}
+                  <span className="link-text">Create</span>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/invoices" className="nav-link">
+                  <FaFileInvoiceDollar size={100} />{" "}
+                  <span className="link-text">Invoices</span>
+                </Link>
+              </li>
+              <li className="nav-item">
             <Link to="/customers" className="nav-link">
               <FaUserAlt size={100} />
               <span className="link-text">Customers</span>
             </Link>
           </li>
-          <li className="nav-item">
-            <Link to="/products" className="nav-link">
-              <FaBoxOpen size={100} />
-              <span className="link-text">Product</span>
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/categories" className="nav-link">
-              <FaLayerGroup size={100} />
-              <span className="link-text">Categories</span>
-            </Link>
-          </li>
+            </>
+          )}
+         
+          {user?.result?.role === "Admin" && (
+            <>
+              <li className="nav-item">
+                <Link to="/products" className="nav-link">
+                  <FaBoxOpen size={100} />
+                  <span className="link-text">Product</span>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/categories" className="nav-link">
+                  <FaLayerGroup size={100} />
+                  <span className="link-text">Categories</span>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/create" className="nav-link">
+                  <FaUserPlus size={100} />
+                  <span className="link-text">Create Account</span>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/employee" className="nav-link">
+                  <FaUserAlt size={100} />
+                  <span className="link-text">All Employee</span>
+                </Link>
+              </li>
+            </>
+          )}
+
           {/* <li className="nav-item">
       <a href="#" className="nav-link">
         <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="space-shuttle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" className="svg-inline--fa fa-space-shuttle fa-w-20 fa-5x">

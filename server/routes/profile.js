@@ -2,7 +2,7 @@ import express from 'express'
 import { getProfiles, createProfile, updateProfile, deleteProfile, getProfile, getProfilesByUser } from '../controllers/profile.js'
 
 const router = express.Router()
-
+router.get('/all', getProfiles)
 router.get('/:id', getProfile)
 router.get('/', getProfilesByUser)
 router.post('/', createProfile)

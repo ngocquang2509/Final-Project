@@ -2,16 +2,28 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import ProfileModel from '../models/ProfileModel.js';
+import InvoiceModel from '../models/InvoiceModel.js';
+import UserModel from '../models/userModel.js'
 
 const router = express.Router();
 
 export const getProfiles = async (req, res) => { 
   try {
-      const allProfiles = await ProfileModel.find().sort({ _id: -1 });
+      const allAccount = await UserModel.find({role: "Employee"});
+      console.log(allAccount)
+
+      const response = await Promise.all(
+        allAccount.map(async account => {
+          const {_id} = account;
+          const profile = await ProfileModel.findOne({userId: _id});
+          return profile
+        })
+      )
               
-      res.status(200).json(allProfiles);
+      res.status(200).json({data: response});
   } catch (error) {
-      res.status(404).json({ message: error.message });
+    console.log(error)
+     // res.status(404).json({ message: error.message });
   }
 }
 
@@ -115,9 +127,15 @@ export const updateProfile = async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No profile with id: ${id}`);
 
+    const profile = await ProfileModel.findById(id)
+
+   await UserModel.findByIdAndDelete(profile.userId)
+
+   await InvoiceModel.deleteMany({creator: profile.userId});
+
     await ProfileModel.findByIdAndRemove(id);
 
-    res.json({ message: "Profile deleted successfully." });
+    res.status(200).json({ message: "Profile deleted successfully." });
 }
 
 

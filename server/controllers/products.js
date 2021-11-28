@@ -11,10 +11,11 @@ export const getAllProduct = async (req, res) => {
             allProduct.map(async item => {
                 const category = await CategoryModel.findById(item.categoryId);
                 return {
-                    name: item.productName,
+                    _id: item._id,
+                    productName: item.productName,
                     quantity: item.quantity,
                     price: item.price,
-                    category: category.categoryName
+                    categoryName: category.categoryName
                 }
             })
         )
@@ -46,7 +47,9 @@ export const updateProduct = async (req, res) => {
     try {
         const {productId} = req.params;
         const updateObj = req.body;
-        await ProductModel.findByIdAndUpdate(productId, {...updateObj});
+        console.log(updateObj);
+        const category = await CategoryModel.findOne({categoryName: updateObj.categoryName})
+        await ProductModel.findByIdAndUpdate(productId, {...updateObj, categoryId: category._id});
         res.status(200).json({status: 200, message: "Product Updated"})
     } catch (error) {
         console.log(error)

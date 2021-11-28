@@ -1,6 +1,6 @@
 import React, {useState } from 'react';
 import { useDispatch } from 'react-redux'
-import styles from './Products.module.css'
+import styles from './Accounts.module.css'
 // import moment from 'moment'
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -23,9 +23,7 @@ import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { Button } from '@material-ui/core';
 import { useSnackbar } from 'react-simple-snackbar'
-
-import { deleteClient } from '../../actions/clientActions';
-// import products from '../../products.json'
+// import accounts from '../../accounts.json'
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -107,16 +105,15 @@ const useStyles2 = makeStyles(theme => ({
 }));
 
 
-const Products = ({ setOpen, handleDelete, products, setEdit, }) => {
+const Employee = ({ setOpen, accounts, handleDelete, setEdit }) => {
     
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(products.length);
+  const [rowsPerPage, setRowsPerPage] = useState(accounts.length);
       // eslint-disable-next-line 
       const [openSnackbar, closeSnackbar] = useSnackbar()
 
-  const dispatch = useDispatch()
-  const rows = products
+  const rows = accounts
   
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows?.length - page * rowsPerPage);
 
@@ -135,6 +132,7 @@ const Products = ({ setOpen, handleDelete, products, setEdit, }) => {
     setOpen((prevState) => !prevState)
   }
 
+ 
 
   const tableStyle = { width: 160, fontSize: 14, cursor: 'pointer', borderBottom: 'none',  padding: '8px', textAlign: 'center' }
 const headerStyle = { borderBottom: 'none', textAlign: 'center'}
@@ -150,10 +148,11 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
           <TableRow>
             <TableCell style={{...headerStyle, width: '10px'}}>Number</TableCell>
             <TableCell style={headerStyle}>Name</TableCell>
-            <TableCell style={headerStyle}>Quantity</TableCell>
-            <TableCell style={headerStyle}>Price</TableCell>
-            <TableCell style={headerStyle}>Category</TableCell>
-            <TableCell style={headerStyle}>Edit</TableCell>
+            <TableCell style={headerStyle}>Email</TableCell>
+            <TableCell style={headerStyle}>Phone Number</TableCell>
+            <TableCell style={headerStyle}>Business Name</TableCell>
+            <TableCell style={headerStyle}>Address</TableCell>        
+            <TableCell style={headerStyle}>Edit</TableCell>        
             <TableCell style={headerStyle}>Delete</TableCell>        
           </TableRow>
         </TableHead>
@@ -165,17 +164,18 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
           ).map((row, index) => (
             <TableRow key={row._id} styel={{cursor: 'pointer'}} >
               <TableCell style={{...tableStyle, width: '10px'}}>{index + 1}</TableCell>
-              <TableCell  style={tableStyle} scope="row" > <Button style={{textTransform: 'none'}}  > {row.productName} </Button></TableCell>
-              <TableCell style={tableStyle}>{row.quantity}</TableCell>
-              <TableCell style={tableStyle}>{row.price}</TableCell>
-              <TableCell style={tableStyle}>{row.categoryName}</TableCell>
+              <TableCell  style={tableStyle} scope="row" > <Button style={{textTransform: 'none'}}  > {row.name} </Button></TableCell>
+              <TableCell style={tableStyle}>{row.email}</TableCell>
+              <TableCell style={tableStyle}>{row.phoneNumber}</TableCell>
+              <TableCell style={tableStyle}>{row.businessName}</TableCell>
+              <TableCell style={tableStyle}>{row.contactAddress}</TableCell>
               <TableCell style={{...tableStyle, width: '10px'}}>
                   <IconButton onClick={() => handleEdit(row)}>
                     <BorderColorIcon style={{width: '20px', height: '20px'}} />
                   </IconButton>
               </TableCell>
               <TableCell style={{...tableStyle, width: '10px'}}>
-                  <IconButton onClick={() =>handleDelete(row._id)}>
+                  <IconButton onClick={() => handleDelete(row._id)}>
                     <DeleteOutlineRoundedIcon style={{width: '20px', height: '20px'}} />
                   </IconButton>
               </TableCell>
@@ -213,4 +213,4 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
   );
 }
 
-export default Products
+export default Employee

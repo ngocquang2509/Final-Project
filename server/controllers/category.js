@@ -45,6 +45,13 @@ export const updateCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
     try {
         const {id} = req.params
+        const allproduct = await ProductModel.find({categoryId: id});
+        await Promise.all(
+            allproduct.map(async item => 
+                await ProductModel.findByIdAndDelete(item._id)
+
+            )
+        )
         await CategoryModel.findByIdAndDelete(id);
         res.status(200).json({status: 200, message: "Category Removed"})
     } catch (error) {

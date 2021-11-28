@@ -30,7 +30,7 @@ export default function Uploader({ form, setForm }) {
     },[file])
 
   const onDrop = useCallback((acceptedFiles) => {
-    const url = "https://api.cloudinary.com/v1_1/almpo/image/upload";
+    const url = "https://api.cloudinary.com/v1_1/wuangngok/image/upload";
 
     acceptedFiles.forEach(async (acceptedFile) => {
     //   const { signature, timestamp } = await getSignature();

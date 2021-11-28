@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema({
     password: {type: String, required: true},
     resetToken:String,
     expireToken:Date,
+    role: {type: String, enum: ['Admin', 'Employee']}
 })
 
 const User = mongoose.model('User', userSchema)

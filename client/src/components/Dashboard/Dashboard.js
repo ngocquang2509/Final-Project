@@ -162,20 +162,7 @@ const Dashboard = () => {
                                 <Frown />
                             </div>
                         </li>
-
-                        <li className={styles.listItem} >
-                            <div>
-                                <p>{overDue.length}</p>
-                                <h2>Overdue</h2>
-                            </div>
-                            <div>
-                                <Clock />
-                            </div>
-                        </li>
-                        
-                 
                 </ul>
-
             </section>
 
             {paymentHistory.length !== 0 && (

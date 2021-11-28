@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import logo from '../../assets/logo.png'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -104,7 +105,7 @@ const Header = () => {
 
     if(!user) return (
         <div className={styles.header2}>
-         <img style={{width: '160px', cursor: 'pointer'}} onClick={()=> history.push('/')} src="https://i.postimg.cc/C5fxh51H/Arc-Invoice-Logo2.png" alt="arc-invoice" />
+         <img style={{width: '100px', cursor: 'pointer'}} onClick={()=> history.push('/')} src={logo} alt="arc-invoice" />
         <button onClick={()=> history.push('/login')} className={styles.login}>Get started</button>
         </div>
     )
