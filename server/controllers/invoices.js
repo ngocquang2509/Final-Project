@@ -52,7 +52,6 @@ export const createInvoice = async (req, res) => {
 
 export const getInvoice = async (req, res) => { 
     const { id } = req.params;
-
     try {
         const invoice = await InvoiceModel.findById(id);
         
@@ -66,12 +65,14 @@ export const getInvoice = async (req, res) => {
 export const updateInvoice = async (req, res) => {
     const { id: _id } = req.params
     const invoice = req.body
+    console.log(invoice);
+    console.log(_id);
 
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No invoice with that id')
 
     const updatedInvoice = await InvoiceModel.findByIdAndUpdate(_id, {...invoice, _id}, { new: true})
 
-    res.json(updatedInvoice)
+    res.status(200).json(updatedInvoice)
 }
 
 

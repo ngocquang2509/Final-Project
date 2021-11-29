@@ -1,19 +1,27 @@
 import * as api from '../api/index'
 import { AUTH, CREATE_PROFILE } from './constants'
+import { toast } from 'react-toastify'
 
 
 export const signin =(formData, openSnackbar) => async(dispatch) => {
 
     try {
         //login the user
-        const { data } = await api.signIn(formData)
-        console.log(data);
-        dispatch({ type: AUTH, data})
-
+        const { data, status } = await api.signIn(formData)
+        if(status === 404) {
+            toast.error(data?.message)
+            return;
+        }
+        else if (status === 400) {
+            toast.error(data?.message)
+            return;
+        }
+        if(status === 200) {
+            dispatch({ type: AUTH, data})
         openSnackbar("Signin successfull")
         // history.push('/dashboard')
         window.location.href="/dashboard"
-
+        }
     } catch (error) {
         // console.log(error?.response?.data?.message)
         openSnackbar(error?.response?.data?.message)

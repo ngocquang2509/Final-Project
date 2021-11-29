@@ -22,11 +22,7 @@ const ClientList = () => {
 
     const user = JSON.parse(localStorage.getItem('profile'))
     const [isLoading, setIsLoading] = useState(false);
-    // const products = []
 
-    
-    // useEffect(() => {
-    // }, [currentId, dispatch]);
     const getData = async () => {
       setIsLoading(true)
       const {data} = await fetchProduct();
@@ -44,11 +40,6 @@ const ClientList = () => {
       getData();
       data?.status === 200 && toast.success("Product Deleted");
     }
-// )
-
-// useEffect(() => {
-//     dispatch(getproductsByUser({ search: user?.result?._id || user.result.googleId }));
-//   },[location, dispatch])
 
   if(!user) {
     history.push('/login')

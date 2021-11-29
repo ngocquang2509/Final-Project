@@ -112,7 +112,6 @@ const Products = ({ setOpen, handleDelete, products, setEdit, }) => {
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(products.length);
-      // eslint-disable-next-line 
       const [openSnackbar, closeSnackbar] = useSnackbar()
 
   const dispatch = useDispatch()

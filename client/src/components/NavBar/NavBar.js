@@ -56,10 +56,10 @@ const NavBar = () => {
             <>
               {" "}
               <li className="nav-item">
-                <Link to="/invoice" className="nav-link">
+                <a href="/invoice" className="nav-link">
                   <FaPlusCircle size={100} />{" "}
                   <span className="link-text">Create</span>
-                </Link>
+                </a>
               </li>
               <li className="nav-item">
                 <Link to="/invoices" className="nav-link">

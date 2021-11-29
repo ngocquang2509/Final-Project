@@ -28,6 +28,7 @@ import Divider from '@material-ui/core/Divider';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import {Select, MenuItem} from '@material-ui/core'
 
 import {initialState} from '../../initialState'
 import currencies from '../../currencies.json'
@@ -35,6 +36,7 @@ import { createInvoice, getInvoice, updateInvoice } from '../../actions/invoiceA
 import { getClientsByUser } from '../../actions/clientActions'
 import AddClient from './AddClient';
 import InvoiceType from './InvoiceType';
+import {fetchProduct} from '../../api/index'
 // import SelectType from './SelectType'
 
 const useStyles = makeStyles((theme) => ({
@@ -79,15 +81,23 @@ const Invoice = () => {
     const dispatch = useDispatch()
     const history = useHistory()
     const user = JSON.parse(localStorage.getItem('profile'))
+    const [listProduct, setListProduct] = useState([]);
 
+    const getProduct = async () => {
+        const {data} = await fetchProduct();
+        setListProduct([...data.data]);
+    }
 
     useEffect(() => {
-        dispatch(getInvoice(id));
+        if(id !== undefined) {
+            dispatch(getInvoice(id));
+        }
         // eslint-disable-next-line
       }, [id]);
 
     useEffect(() => {
         dispatch(getClientsByUser({search: user?.result._id || user?.result?.googleId}));
+        getProduct();
         // eslint-disable-next-line
     }, [dispatch]);
 
@@ -138,6 +148,11 @@ const Invoice = () => {
     const handleChange =(index, e) => {
         const values = [...invoiceData.items]
         values[index][e.target.name] = e.target.value
+        if(e.target.name === 'itemName') {
+            const foundItem = listProduct.filter(item => item.productName === e.target.value)
+            values[index]["unitPrice"] = foundItem[0].price
+            values[index]["quantity"] = 1;
+        }
         setInvoiceData({...invoiceData, items: values})
         
     }
@@ -338,9 +353,12 @@ const Invoice = () => {
             <TableBody>
             {invoiceData?.items?.map((itemField, index) => (
                 <TableRow key={index}>
-                <TableCell  scope="row" style={{width: '40%' }}> <InputBase style={{width: '100%'}} outline="none" sx={{ ml: 1, flex: 1 }} type="text" name="itemName" onChange={e => handleChange(index, e)} value={itemField.itemName} placeholder="Item name or description" /> </TableCell>
+                <TableCell  scope="row" style={{width: '40%' }}> <Select style={{width: '100%'}} outline="none" sx={{ ml: 1, flex: 1 }} type="text" name="itemName" onChange={e => handleChange(index, e)} value={itemField.itemName} placeholder="Item name or description" >
+                    <MenuItem value={""}></MenuItem>
+                    {listProduct.map(item => <MenuItem key={item._id} value={item.productName}>{item.productName}</MenuItem>)}
+                    </Select> </TableCell>
                 <TableCell align="right"> <InputBase sx={{ ml: 1, flex: 1 }} type="number" name="quantity" onChange={e => handleChange(index, e)} value={itemField.quantity} placeholder="0" /> </TableCell>
-                <TableCell align="right"> <InputBase sx={{ ml: 1, flex: 1 }} type="number" name="unitPrice" onChange={e => handleChange(index, e)} value={itemField.unitPrice} placeholder="0" /> </TableCell>
+                <TableCell align="right"> <InputBase disabled={true} sx={{ ml: 1, flex: 1 }} type="number" name="unitPrice" onChange={e => handleChange(index, e)} value={itemField.unitPrice} placeholder="0" /> </TableCell>
                 <TableCell align="right"> <InputBase sx={{ ml: 1, flex: 1 }} type="number" name="discount"  onChange={e => handleChange(index, e)} value={itemField.discount} placeholder="0" /> </TableCell>
                 <TableCell align="right"> <InputBase sx={{ ml: 1, flex: 1 }} type="number" name="amount" onChange={e => handleChange(index, e)}  value={(itemField.quantity * itemField.unitPrice) - (itemField.quantity * itemField.unitPrice) * itemField.discount / 100} disabled /> </TableCell>
                 <TableCell align="right"> 

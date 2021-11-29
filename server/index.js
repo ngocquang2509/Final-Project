@@ -7,12 +7,10 @@ import nodemailer from 'nodemailer'
 import UserModel from './models/userModel.js'
 import ProfileModel from './models/ProfileModel.js'
 import bcrypt from 'bcryptjs'
-
-
-
+import path from 'path'
+dotenv.config()
 
 const app = express()
-dotenv.config()
 
 import invoiceRoutes from './routes/invoices.js'
 import clientRoutes from './routes/clients.js'
@@ -42,19 +40,19 @@ app.use((express.urlencoded({ limit: "30mb", extended: true})))
 app.use((cors()))
 app.use(morgan('dev'))
 
-app.get('/', (req, res) => {
+app.get('/api/', (req, res) => {
     res.send('Server is running')
   })
 
 const DB_URL = process.env.DB_URL
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 5000
 
-app.use('/users', userRoutes)
-app.use('/profiles', profile)
-app.use('/clients', clientRoutes)
-app.use('/invoices', invoiceRoutes)
-app.use('/products', productRouters)
-app.use('/categories', cateRouter)
+app.use('/api/users', userRoutes)
+app.use('/api/profiles', profile)
+app.use('/api/clients', clientRoutes)
+app.use('/api/invoices', invoiceRoutes)
+app.use('/api/products', productRouters)
+app.use('/api/categories', cateRouter)
 
 
 // NODEMAILER TRANSPORT FOR SENDING INVOICE VIA EMAIL
@@ -140,6 +138,8 @@ const init = async () => {
     }
 }
 
+console.log(DB_URL)
+
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {init(); app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))})
-    .catch((error) => console.log("DB error" + error.message))
+    .catch((error) => console.log("DB error" + error.message + DB_URL))

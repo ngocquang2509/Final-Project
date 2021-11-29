@@ -5,7 +5,6 @@ const API = axios.create({ baseURL: process.env.REACT_APP_API,
 validateStatus: function (status) {
     return status <= 500;
 }})
-console.log(process.env.REACT_APP_API);
 
 API.interceptors.request.use((req) => {
     if(localStorage.getItem('profile')) {
@@ -30,7 +29,7 @@ export const deleteClient =(id) => API.delete(`/clients/${id}`)
 export const fetchClientsByUser = (searchQuery) => API.get(`/clients/user?searchQuery=${searchQuery.search}`);
 
 
-export const signIn =(formData)=> API.post('/users/signin', formData)
+export const signIn =(formData)=> { console.log(process.env.REACT_APP_API); return API.post('/users/signin', formData)}
 export const signUp =(formData)=> API.post('/users/signup', formData)
 export const forgot = (formData) => API.post('/users/forgot', formData);
 export const reset = (formData) => API.post('/users/reset', formData);

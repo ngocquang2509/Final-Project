@@ -6,7 +6,7 @@ import { GoogleLogin } from 'react-google-login'
 import {useDispatch} from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
 import { signup, signin } from '../../actions/auth'
-import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core'
+import { Avatar, Button, Paper, Grid, Typography, Container} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { createProfile } from '../../actions/profile'
 // import Google from './Google'
@@ -80,7 +80,7 @@ const Login = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form}>
           <Grid container spacing={2}>
             { isSignup && (
             <>
@@ -94,7 +94,7 @@ const Login = () => {
           <div className={styles.buttons}>
                <div>
                     {/* <button className={styles.submitBtn}> { isSignup ? 'Sign Up' : 'Sign In' }</button> */}
-                    <ProgressButton>{ isSignup ? 'Sign Up' : 'Sign In' }</ProgressButton>
+                    <Button variant="outlined" onClick={handleSubmit}>Sign In</Button>
                 </div>
           </div>
         </form>

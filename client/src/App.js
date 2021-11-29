@@ -18,6 +18,7 @@ import Products from './components/Product/Index';
 import Employee from './components/Employee/Index';
 import Categories from './components/Categories/Index'
 import CreateEmployee from './components/CreateEmployee/CreateEmployee';
+import UserInvoice from './components/UserInvoice/InvoiceDetails'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/invoice" exact component={Invoice} />
           <Route path="/edit/invoice/:id" exact component={Invoice} />
           <Route path="/invoice/:id" exact component={InvoiceDetails} />
+          <Route path="/invoice/user/:id" exact component={UserInvoice} />
           <Route path="/invoices" exact component={Invoices} />
           <Route path="/login" exact component={Login} />
           <Route path="/settings" exact component={Settings} />

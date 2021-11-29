@@ -16,6 +16,9 @@ function Chart({ paymentHistory }) {
     for(let i = 0; i < paymentHistory.length; i++) {
             paymentReceived = [...paymentReceived, paymentHistory[i].amountPaid]
     }
+
+    console.log(paymentReceived)
+    console.log(paymentDates)
   
 
 
@@ -54,9 +57,11 @@ function Chart({ paymentHistory }) {
       style={{
         backgroundColor: "white",
         textAlign: "center",
-        width: '90%',
         margin: '10px auto',
-        padding: '10px'
+        padding: '10px',
+        height: 300,
+        marginRight: 50,
+        width: 400,
       }}
     >
       <br />

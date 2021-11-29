@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  client:
+    container_name: client
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile
+      context: ./client      
+    ports:
+      - '80:80'
+    depends_on:
+      - server
+  server:
+    container_name: server
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    environment:
+      - DB_URL=mongodb://mongo:27017/finalproject
+      - PORT=8080
+      - SECRET=ngocccccc
+      - SMTP_PORT=465
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_USER=ngocquang2509@gmail.com
+      - SMTP_PASS=quangngoc
+    ports:
+      - '8080:80'
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017
+volumes:
+ mongodb:
+
+

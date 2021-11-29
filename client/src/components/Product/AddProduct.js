@@ -76,9 +76,10 @@ const AddClient = ({ setOpen, open, edit, setEdit }) => {
   }
 
   useEffect(() => {
-    edit?._id !== '' && setProduct({...edit})
     getCate();
+    edit?._id !== '' && setProduct({...edit, categoryName: listCate[0]})
   }, [edit])
+  console.log(product?._id)
   // eslint-disable-next-line
   const [openSnackbar, closeSnackbar] = useSnackbar();
 
@@ -112,7 +113,6 @@ const AddClient = ({ setOpen, open, edit, setEdit }) => {
           toast?.error(data?.message);
           return;
         } else {
-          clear();
           handleClose();
           toast.success("Product Created");
           window.location.href = "/products";
@@ -213,7 +213,7 @@ const AddClient = ({ setOpen, open, edit, setEdit }) => {
               variant="contained"
               style={{ marginRight: "25px" }}
             >
-              {product?._id !== '' ? "Update": "Create"} Product
+              {product?._id ? "Update": "Create"} Product
             </Button>
           </DialogActions>
         </Dialog>
