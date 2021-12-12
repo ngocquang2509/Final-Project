@@ -57,7 +57,7 @@ app.use('/api/categories', cateRouter)
 
 // NODEMAILER TRANSPORT FOR SENDING INVOICE VIA EMAIL
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
+  service: 'Gmail',
   port : process.env.SMTP_PORT,
   secure: true,
   auth: {
