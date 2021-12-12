@@ -71,7 +71,7 @@ const transporter = nodemailer.createTransport({
 
 var options = { format: 'A4' };
 //SEND PDF INVOICE VIA EMAIL
-app.post('/send-pdf', (req, res) => {
+app.post('/api/send-pdf', (req, res) => {
     const { email, company } = req.body
     console.log(email);
 
@@ -100,7 +100,7 @@ app.post('/send-pdf', (req, res) => {
 });
 
 //CREATE AND SEND PDF INVOICE
-app.post('/create-pdf', (req, res) => {
+app.post('/api/create-pdf', (req, res) => {
     pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
         if(err) {
             res.send(Promise.reject());
@@ -110,7 +110,7 @@ app.post('/create-pdf', (req, res) => {
 });
 
 //SEND PDF INVOICE
-app.get('/fetch-pdf', (req, res) => {
+app.get('/api/fetch-pdf', (req, res) => {
      res.sendFile(`${__dirname}/invoice.pdf`)
 })
 
@@ -140,6 +140,6 @@ const init = async () => {
 
 console.log(DB_URL)
 
-mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true})
     .then(() => {init(); app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))})
     .catch((error) => console.log("DB error" + error.message + DB_URL))

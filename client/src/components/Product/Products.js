@@ -23,7 +23,7 @@ import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { Button } from '@material-ui/core';
 import { useSnackbar } from 'react-simple-snackbar'
-
+import XLSX from 'xlsx'
 import { deleteClient } from '../../actions/clientActions';
 // import products from '../../products.json'
 
@@ -135,6 +135,21 @@ const Products = ({ setOpen, handleDelete, products, setEdit, }) => {
   }
 
 
+  const exportExcel = () => {
+    const data = products.map(item => {
+      return {
+        "Product Name": item.productName,
+        "Product Quantity": item.quantity,
+        "Product Price": item.price,
+        "Product Category": item.categoryName
+      }
+    })
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'products');
+  }
+
+
   const tableStyle = { width: 160, fontSize: 14, cursor: 'pointer', borderBottom: 'none',  padding: '8px', textAlign: 'center' }
 const headerStyle = { borderBottom: 'none', textAlign: 'center'}
 
@@ -142,6 +157,8 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
   return (
     <div className={styles.pageLayout}>
     <Container style={{width: '85%'}}>
+    <Button onClick={exportExcel} variant='contain' color='secondary'>Export to Excel</Button>
+
         <TableContainer component={Paper} elevation={0}>
       <Table className={classes.table} aria-label="custom pagination table">
 

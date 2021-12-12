@@ -49,10 +49,21 @@ const Dashboard = () => {
     totalAmount += invoices[i].total;
   }
 
+  const fetchData = () => {
+    if(user?.result.role === 'Admin') {
+      dispatch(
+        getInvoicesByUser({ search: null})
+      );
+    }
+    else {
+      dispatch(
+        getInvoicesByUser({ search: user?.result._id || user?.result?.googleId })
+      );
+    }
+  }
+
   useEffect(() => {
-    dispatch(
-      getInvoicesByUser({ search: user?.result._id || user?.result?.googleId })
-    );
+    fetchData()
   }, [location, dispatch]);
 
   const unpaidInvoice = invoices?.filter(

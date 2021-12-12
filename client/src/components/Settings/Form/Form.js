@@ -54,6 +54,8 @@ const Settings = () => {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  console.log(form.logo);
+
   return (
     <div>
      {switchEdit === 0 && (
@@ -73,8 +75,8 @@ const Settings = () => {
     {switchEdit === 1 && (
       <Container component="main" maxWidth="sm">
       <Paper className={classes.paper} elevation={1} >
-      <Avatar style={{width: '100px', height: '100px'}} src={profiles?.logo} alt="" className={classes.avatar}>
-         </Avatar>
+      {form.logo  && <Avatar style={{width: '100px', height: '100px'}} src={form?.logo} alt="" className={classes.avatar}>
+         </Avatar>}
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Uploader form={form} setForm={setForm} />

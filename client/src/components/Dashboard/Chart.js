@@ -4,6 +4,8 @@ import ReactApexChart from "react-apexcharts";
 function Chart({ paymentHistory }) {
 
 
+  console.log(paymentHistory)
+
     let paymentDates = []
     for(let i = 0; i < paymentHistory.length; i++) {
       const newDate = new Date(paymentHistory[i].datePaid);
@@ -17,8 +19,8 @@ function Chart({ paymentHistory }) {
             paymentReceived = [...paymentReceived, paymentHistory[i].amountPaid]
     }
 
-    console.log(paymentReceived)
-    console.log(paymentDates)
+    console.log(paymentHistory.map(item => item.amountPaid))
+    console.log(paymentHistory.map(item => new Date(item.datePaid).toLocaleDateString()))
   
 
 
@@ -26,7 +28,7 @@ function Chart({ paymentHistory }) {
 
     {
       name: "Payment Recieved",
-      data: paymentReceived,
+      data: paymentHistory.map(item => item.amountPaid),
     },
   ];
   const options = {
@@ -43,7 +45,7 @@ function Chart({ paymentHistory }) {
     },
     xaxis: {
       type: "datetime",
-      categories: paymentDates,
+      categories: paymentHistory.map(item => new Date(item.datePaid).toLocaleDateString()),
     },
     tooltip: {
       x: {
@@ -57,21 +59,20 @@ function Chart({ paymentHistory }) {
       style={{
         backgroundColor: "white",
         textAlign: "center",
-        margin: '10px auto',
-        padding: '10px',
+        margin: "10px auto",
+        padding: "10px",
         height: 300,
         marginRight: 50,
-        width: 400,
+        width: 500,
       }}
     >
       <br />
       <ReactApexChart
-        options={options}
-        series={series}
-        type="bar"
-        height={300}
-        
-      />
+          options={options}
+          series={series}
+          type="bar"
+          height={300}
+        />
     </div>
   );
 }

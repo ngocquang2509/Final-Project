@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className={styles.pageContainer}>
       <section className={styles.hero}>
-        <h1>Manage your wife xD</h1>
+        <h1>NQ Warehouse Management</h1>
         <div className={styles.paragraph}></div>
         <div className={styles.imgContainer}>
           <img

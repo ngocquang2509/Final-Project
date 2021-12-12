@@ -167,7 +167,7 @@ const InvoiceDetails = () => {
       status: invoice.status,
       totalAmountReceived: toCommas(totalAmountReceived),
       balanceDue: toCommas(total - totalAmountReceived),
-      link: `${process.env.REACT_APP_URL}/invoice/${invoice._id}`,
+      link: `${window.location.origin}/invoice/user/${invoice._id}`,
       company: company,
   })
   // .then(() => console.log("invoice sent successfully"))

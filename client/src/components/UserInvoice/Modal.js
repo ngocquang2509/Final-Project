@@ -14,10 +14,7 @@ import DatePicker from "./DatePicker";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useParams } from "react-router";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
-import { useDispatch } from "react-redux";
-import { updateInvoice as updateAPI } from "../../api";
-import Payment from "./Paypal";
+import { updateInvoice as updateAPI } from "../../api/index";
 import { toast } from "react-toastify";
 
 const styles = (theme) => ({
@@ -66,86 +63,36 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-const Modal = ({ setOpen, open, invoice }) => {
+const Modal = ({ setOpen, open, invoice, getInvoice }) => {
   //const dispatch = useDispatch()
   //Create a state to add new payment record
   const [payment, setPayment] = useState({
-    amountPaid: 0,
+    amountPaid: invoice.total,
     datePaid: new Date(),
     paymentMethod: "PayPal",
     note: "",
     paidBy: "",
   });
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  //Crate a state to handle the payment records
+  const [updateInvoice, setUpdateInvoice] = useState({
+    status: "",
+    paymentRecords: invoice.paymentRecords,
+    totalAmountReceived: 0
+  });
+
+  useEffect(() => {
+    setPayment({...payment, amountPaid: invoice.total, paidBy: invoice.client.name})
+  }, [invoice])
+
+  console.log(payment);
+  console.log(updateInvoice)
 
   const { id } = useParams();
 
   //Material ui datepicker
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-  //Crate a state to handle the payment records
-  const [paymentRecords, setPaymentRecords] = useState([]);
-  const [method, setMethod] = useState({});
-  const [totalAmountReceived, setTotalAmountReceived] = useState(0);
-  const [updatedInvoice, setUpdatedInvoice] = useState({});
+  
 
-  useEffect(() => {
-    setPayment({ ...payment, paymentMethod: method?.title });
-  }, [method]);
-
-  useEffect(() => {
-    setPayment({ ...payment, datePaid: selectedDate });
-  }, [selectedDate]);
-
-  useEffect(() => {
-    if (invoice) {
-      setPayment({
-        ...payment,
-        amountPaid:
-          parseInt(invoice.total) - parseInt(invoice.totalAmountReceived),
-        paidBy: invoice?.client?.name,
-      });
-    }
-  }, [invoice]);
-
-  useEffect(() => {
-    if (invoice?.paymentRecords) {
-      setPaymentRecords(invoice?.paymentRecords);
-    }
-  }, [invoice]);
-
-  //Get the total amount paid
-  useEffect(() => {
-    let totalReceived = 0;
-    for (var i = 0; i < invoice?.paymentRecords?.length; i++) {
-      totalReceived += parseInt(invoice?.paymentRecords[i]?.amountPaid);
-      setTotalAmountReceived(totalReceived * 10);
-    }
-  }, [invoice, payment]);
-
-  useEffect(() => {
-    setUpdatedInvoice({
-      ...invoice,
-      status:
-        parseInt(totalAmountReceived) + parseInt(payment.amountPaid) >=
-        invoice?.total
-          ? "Paid"
-          : "Partial",
-      paymentRecords: [
-        ...paymentRecords.map((item) => ({
-          ...item,
-          amountPaid: item.amountPaid * 10,
-        })),
-        payment,
-      ],
-      totalAmountReceived:
-        parseInt(totalAmountReceived) + parseInt(payment.amountPaid),
-    });
-  }, [payment, paymentRecords, totalAmountReceived, invoice]);
-
-  const [updateInvoice, setUpdateInvoice] = useState({
-    status: "",
-    paymentRecords: [],
-    totalAmountReceived: 0,
-  });
 
   const handleAmountChange = (e) => {
     setPayment({
@@ -164,20 +111,17 @@ const Modal = ({ setOpen, open, invoice }) => {
   };
 
   const handleSubmitPayment = async () => {
-    // dispatch(updateInvoice(invoice._id, updatedInvoice))
-    // .then(() => {
-    //   handleClose()
-    //   window.location.reload()
-    // })
-    // clear()
-    setUpdateInvoice({
+    console.log(updateInvoice)
+
+    const { data, status } = await updateAPI(id, {
       status: payment?.amountPaid >= invoice?.total ? "Paid" : "Partial",
-      paymentRecords: [...updatedInvoice.paymentRecords, payment],
+      paymentRecords: [...updateInvoice.paymentRecords, payment],
       totalAmountReceived: payment?.amountPaid,
     });
-    const { data, status } = await updateAPI(id, updateInvoice);
     if (status === 200) {
-      window.location.reload();
+      getInvoice()
+      handleClose()
+       toast.success("Payment succeed");
     }
   };
 
@@ -217,7 +161,7 @@ const Modal = ({ setOpen, open, invoice }) => {
               variant="outlined"
               value={payment.amountPaid}
               onChange={handleAmountChange}
-            />
+            /><br/>
 
             <TextField
               type="text"
@@ -254,9 +198,8 @@ const Modal = ({ setOpen, open, invoice }) => {
                     ],
                   });
                 }}
-                onApprove={async (data, actions) => {
-                  await handleSubmitPayment();
-                  toast.success("Payment succeed");
+                onApprove={(data, actions) => {
+                  handleSubmitPayment();
                 }}
               />
             </PayPalScriptProvider>

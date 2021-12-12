@@ -132,11 +132,10 @@ hr {
         </div>
         
       <div class"footer">
-          <a href="https://arcinvoice.com">
-          <img class="footer-logo" src="https://i.postimg.cc/C5fxh51H/Arc-Invoice-Logo2.png"/>
+          <a href="${link}">
+          <img class="footer-logo" src="https://res.cloudinary.com/wuangngok/image/upload/v1639291929/logo_dehn2l.png"/>
         </a>
       </div>
-    <p style="text-align: center">Make beautiful invoice for free at arcinvoice.com</p>
     </div>
     </body>
 </html>`

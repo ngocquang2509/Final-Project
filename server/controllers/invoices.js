@@ -1,13 +1,18 @@
 import mongoose from 'mongoose'
 
 import InvoiceModel from '../models/InvoiceModel.js'
-
+import ProductModel from '../models/Products.js'
 
 export const getInvoicesByUser = async (req, res) => {
     const {searchQuery} = req.query;
-
+    let invoices;
     try {
-        const invoices = await InvoiceModel.find({ creator: searchQuery });
+        if(searchQuery) {
+            invoices = await InvoiceModel.find({ creator: searchQuery });
+        }
+        else {
+            invoices = await InvoiceModel.find();
+        }
         // const invoices = await InvoiceModel.find().where('creator').in(searchQuery);
 
         res.status(200).json({ data: invoices });
@@ -39,6 +44,14 @@ export const createInvoice = async (req, res) => {
 
     const invoice = req.body
 
+    await Promise.all(
+        invoice.items.map(async item => {
+            const findProduct = await ProductModel.findOne({productName: item.itemName});
+            findProduct.quantity = findProduct.quantity - item.quantity;
+            await findProduct.save();
+        })
+    )
+
     const newInvoice = new InvoiceModel(invoice)
 
     try {
@@ -66,7 +79,6 @@ export const updateInvoice = async (req, res) => {
     const { id: _id } = req.params
     const invoice = req.body
     console.log(invoice);
-    console.log(_id);
 
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No invoice with that id')
 

@@ -67,7 +67,7 @@ const CreateEmployee = () => {
             </>
             <Field name="email" label="Email Address" value={formData.email} handleChange={handleChange} type="email" />
             <Field name="password" label="Password" value={formData.password} handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
-            <Field name="confirmPassword" label="Password" value={formData.confirmPassword} handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
+            <Field name="confirmPassword" label="Confirm Password" value={formData.confirmPassword} handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
           </Grid>
           <div className={styles.buttons}>
                <div>

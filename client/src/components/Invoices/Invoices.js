@@ -115,25 +115,16 @@ const headerStyle = { borderBottom: 'none', textAlign: 'center'}
 const Invoices = () => {
     
   const dispatch = useDispatch()
-  const location = useLocation()
   const history = useHistory()
   const user = JSON.parse(localStorage.getItem('profile'))
   const rows = useSelector(state => state.invoices.invoices)
   const isLoading = useSelector(state => state.invoices.isLoading)
-        // eslint-disable-next-line 
   const [openSnackbar, closeSnackbar] = useSnackbar()
 
-  // const rows = []
-
-
-    // useEffect(() => {
-    //     dispatch(getInvoices());
-    // }, [dispatch]);
 
     useEffect(() => {
-      dispatch(getInvoicesByUser({ search: user?.result?._id || user?.result?.googleId}));
-      // eslint-disable-next-line
-    },[location])
+      dispatch(getInvoicesByUser({ search: user?.result?._id}));
+    },[])
 
 
    const toCommas = (value) => {

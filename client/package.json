@@ -19,6 +19,7 @@
     "apexcharts": "^3.28.1",
     "axios": "^0.21.1",
     "date-fns": "^2.0.0-beta.5",
+    "export-from-json": "^1.4.1",
     "file-saver": "^2.0.5",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
@@ -43,7 +44,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
     "uuid": "^8.3.2",
-    "web-vitals": "^1.1.1"
+    "web-vitals": "^1.1.1",
+    "xlsx": "^0.17.4"
   },
   "scripts": {
     "start": "react-scripts start",

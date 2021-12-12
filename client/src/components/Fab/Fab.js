@@ -56,6 +56,7 @@ const FabButton = () => {
           mainButtonStyles={mainButtonStyles}
           icon={<AddIcon />}
           alwaysShowTitle={true}
+          style={{bottom: 100, right: 10}}
         >
             <Action
               text="New Category"

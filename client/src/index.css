@@ -185,6 +185,8 @@ main {
   transition: width 600ms ease;
   overflow: scroll;
   z-index: 100;
+  margin-bottom: 0 !important;
+
 }
 
 
@@ -192,6 +194,7 @@ main {
 .navbar::-webkit-scrollbar {
   width: 1px;
   height: 1px;
+  
 }
 
 /* Track */
@@ -296,8 +299,9 @@ main {
 /* Small screens */
 @media only screen and (max-width: 600px) {
   .navbar {
+    left: 0;
     bottom: 0;
-    width: 100vw;
+    width: 101vw;
     height: 5rem;
   }
 
