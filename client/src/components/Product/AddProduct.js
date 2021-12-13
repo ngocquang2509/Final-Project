@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import { createProduct, fetchCategories, editProduct } from "../../api";
 import { useSnackbar } from "react-simple-snackbar";
 import {toast} from 'react-toastify'
+import { fi } from "date-fns/locale";
 
 const styles = (theme) => ({
   root: {
@@ -73,14 +74,17 @@ const AddClient = ({ setOpen, open, edit, setEdit }) => {
   const getCate = async () => {
     const response = await fetchCategories();
     setListCate(response?.data?.data);
-    setProduct({...product, categoryName: response?.data?.data[0].categoryName})
+    if(edit?._id) {
+      setProduct({...edit, categoryName: response?.data?.data[0].categoryName})
+    } else {
+      setProduct({...product, categoryName: response?.data?.data[0].categoryName})
+    }
   }
 
   useEffect(() => {
     getCate();
   }, [edit])
   // eslint-disable-next-line
-  const [openSnackbar, closeSnackbar] = useSnackbar();
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -187,14 +191,6 @@ const AddClient = ({ setOpen, open, edit, setEdit }) => {
                 type="text"
                 onChange={handleChange}
                 value={product.price}
-              />
-              <input
-                placeholder="Product Image"
-                style={inputStyle}
-                name="image"
-                type="text"
-                onChange={handleChange}
-                value={product.image}
               />
               <select
                 placeholder="Product Category"

@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY . /app
 
-ARG REACT_APP_API=http://localhost/api
-ARG REACT_APP_URL=http://localhost
+ARG REACT_APP_API=/api
+ARG REACT_APP_URL=/
 
 
 RUN npm install

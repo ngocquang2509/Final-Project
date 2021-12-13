@@ -144,9 +144,11 @@ const Products = ({ setOpen, handleDelete, products, setEdit, }) => {
         "Product Category": item.categoryName
       }
     })
+    console.log(data);
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'products');
+    XLSX.writeFile(wb, 'products.xlsx')
   }
 
 
