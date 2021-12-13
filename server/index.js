@@ -94,6 +94,7 @@ app.post('/api/send-pdf', (req, res) => {
 
         if(err) {
             res.send(Promise.reject());
+            return;
         }
         res.send(Promise.resolve());
     });

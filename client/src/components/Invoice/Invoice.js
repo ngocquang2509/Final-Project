@@ -67,7 +67,7 @@ const Invoice = () => {
     const [invoiceData, setInvoiceData] = useState(initialState)
     const [ rates, setRates] = useState(0)
     const [vat, setVat] = useState(0)
-    const [currency, setCurrency] = useState(currencies[0].value)
+    const [currency, setCurrency] = useState("VND")
     const [subTotal, setSubTotal] = useState(0)
     const [total, setTotal] = useState(0)
     const today = new Date();

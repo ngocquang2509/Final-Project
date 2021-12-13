@@ -73,13 +73,12 @@ const AddClient = ({ setOpen, open, edit, setEdit }) => {
   const getCate = async () => {
     const response = await fetchCategories();
     setListCate(response?.data?.data);
+    setProduct({...product, categoryName: response?.data?.data[0].categoryName})
   }
 
   useEffect(() => {
     getCate();
-    edit?._id !== '' && setProduct({...edit, categoryName: listCate[0]})
   }, [edit])
-  console.log(product?._id)
   // eslint-disable-next-line
   const [openSnackbar, closeSnackbar] = useSnackbar();
 

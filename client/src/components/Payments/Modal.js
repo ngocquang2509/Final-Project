@@ -157,7 +157,7 @@ const Modal = ({ setOpen, open, invoice }) => {
             </DialogTitle>
             <DialogContent dividers>
 
-            <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} setPayment={setPayment} />
 
             <TextField 
                 type="number" 

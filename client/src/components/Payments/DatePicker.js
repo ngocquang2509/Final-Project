@@ -7,12 +7,13 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-export default function MaterialUIPickers({ setSelectedDate, selectedDate}) {
+export default function MaterialUIPickers({ setSelectedDate, selectedDate, setPayment}) {
   // The first commit of Material-UI
 
 
   const handleDateChange = (date) => {
     setSelectedDate(date.toISOString());
+    setPayment(prev => ({...prev, datePaid: date.toISOString()}))
   };
 
   return (
