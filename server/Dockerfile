@@ -19,6 +19,7 @@ RUN apk update && apk add --no-cache fontconfig curl curl-dev && \
     cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
 
 RUN npm install html-pdf -g
+RUN npm install phantomjs-prebuilt --s
 RUN npm link html-pdf
 RUN npm link phantomjs-prebuilt
 RUN npm install
