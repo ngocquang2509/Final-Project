@@ -70,15 +70,12 @@ const transporter = nodemailer.createTransport({
 })
 
 var options = { format: 'A4' };
-//SEND PDF INVOICE VIA EMAIL
 app.post('/api/send-pdf', (req, res) => {
     const { email, company } = req.body
     console.log(email);
 
-    // pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
     pdf.create(pdfTemplate(req.body), options).toFile('invoice.pdf', (err) => {
        
-          // send mail with defined transport object
         transporter.sendMail({
             from: `${company.businessName ? company.businessName : company.name} <hello@arcinvoice.com>`, // sender address
             to: `${email}`, // list of receivers
@@ -102,9 +99,11 @@ app.post('/api/send-pdf', (req, res) => {
 
 //CREATE AND SEND PDF INVOICE
 app.post('/api/create-pdf', (req, res) => {
-    pdf.create(pdfTemplate(req.body), {}).toFile('invoice.pdf', (err) => {
+    console.log(req.body);
+    pdf.create(pdfTemplate(req.body), {format: 'A4'}).toFile('invoice.pdf', (err) => {
         if(err) {
-            res.send(Promise.reject());
+            console.log(err);
+            res.status(400).send(Promise.reject());
         }
         res.send(Promise.resolve());
     });
